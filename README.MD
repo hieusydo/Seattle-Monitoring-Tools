@@ -4,9 +4,11 @@
 
 #### Target to monitor:
 - Seattle infrastructure server (which?)
-  * services: advertising
-  * other services?
+  * Advertising Service: check for free (unassigned) nodes' IP addresses
+  * Software Updating Site: check if the update server is still up; if the version on the local machine is up-to-date
+  * Zenodotus: check if the domain name registerd by a user is still up 
 - Seattle node
+  * Custom Installer Builder: check vesselinfo
   * all vessels within a node
 - Seattle services: 
 _APIs_
@@ -14,10 +16,13 @@ _APIs_
   * network
   * timer
 _Services and helper functions_
-  * monitoring space
-  * etc
+  * Integration Test Framework: sends notifications (gmail and irc) in case of critical failure
+  * check disk space
+  * check critical processes that should be running:
+    * on Seattle server: advertiseserver.py
+    * on Seattle ClearingHouse: transition\_donation\_to\_canonical.py, transition\_onepercentmanyevents\_to\_canonical.py, transition\_canonical\_to\_twopercent.py, transition\_twopercent\_to\_twopercent.py, check\_active\_db\_nodes.py', apache2, /usr/sbin/mysqld, backend\_daemon.py, lockserver\_daemon.py
 
-#### What metrics:
+#### What metrics
 - Availability
   * how many nodes are available
 - Performance: 
