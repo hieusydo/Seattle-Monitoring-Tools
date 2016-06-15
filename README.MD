@@ -2,7 +2,7 @@
 
 ### Design and Implementation Questions
 
-#### Target to monitor:
+#### Target to monitor
 - Seattle infrastructure server (which?)
   * Advertising Service: check for free (unassigned) nodes' IP addresses
   * Software Updating Site: check if the update server is still up; if the version on the local machine is up-to-date
@@ -11,11 +11,6 @@
   * Custom Installer Builder: check vesselinfo
   * all vessels within a node
 - Seattle services: 
-_APIs_
-  * file IO
-  * network
-  * timer
-_Services and helper functions_
   * Integration Test Framework: sends notifications (gmail and irc) in case of critical failure
   * check disk space
   * check critical processes that should be running:
