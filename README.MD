@@ -1,8 +1,18 @@
 # Distributed Monitoring Tools
 
 ### Table of Content
-1. [Design and Implementation Questions](Design-and-Implementation-Questions)
+1. [Design and Implementation Questions](https://github.com/hieusydo/Seattle-Monitoring-Tools#1-design-and-implementation-questions)
+  * [Target to monitor](https://github.com/hieusydo/Seattle-Monitoring-Tools#target-to-monitor)
+  * [What metrics](https://github.com/hieusydo/Seattle-Monitoring-Tools#what-metrics)
+  * [Where should the monitoring tools run](https://github.com/hieusydo/Seattle-Monitoring-Tools#where-should-monitoring-tool-run)
+  * [Notification](https://github.com/hieusydo/Seattle-Monitoring-Tools#notification)
+  * [Who can run the tool](https://github.com/hieusydo/Seattle-Monitoring-Tools#who-can-run-the-tool)
 2. [Monitoring Pipeline](Monitoring-Pipeline)
+  * [Overview](https://github.com/hieusydo/Seattle-Monitoring-Tools#overview)
+  * [Node manager](https://github.com/hieusydo/Seattle-Monitoring-Tools#node-manager)
+  * [Advertise Server](https://github.com/hieusydo/Seattle-Monitoring-Tools#advertise-server)
+  * [Software Update Server](https://github.com/hieusydo/Seattle-Monitoring-Tools#software-update-server)
+  * [Zenodotus](https://github.com/hieusydo/Seattle-Monitoring-Tools#zenodotus)
 
 ### 1. Design and Implementation Questions
 
@@ -31,7 +41,7 @@
   * number of programs run and their status
   * disk capacity
 
-#### Where should monitoring tool run
+#### Where should the monitoring tools run
 Differ in places and privileges
 
 Consider: low hurdle & open for everyone to be able to just run the monitoring tool easily
@@ -58,11 +68,11 @@ _Best ways to handle the monitoring information?_ (decided later)
 - General public (limited monitoring capability, however)
 
 ### 2. Monitoring Pipeline
-__Overview__
+#### Overview
 
-![graph](img/monitor-pipeline.png)
+<img src="https://github.com/hieusydo/Seattle-Monitoring-Tools/blob/master/img/monitor-pipline.png" width="750" />
 
-__Node manager__
+#### Node manager
 - Is there enough diskspace on a node? 
   * Yes: nothing 
   * No: notify the node owner and the experiment manager
@@ -75,7 +85,7 @@ __Node manager__
   * each node: number of vessels
   * each vessel: IP addresses, status (started, stopped, combined, split, changed)
 
-__Advertise server__
+#### Advertise server
 - Are the critical processes running? (determine the role of these processes)
     * on Seattle server: advertiseserver.py
     * on Seattle ClearingHouse: 
@@ -85,7 +95,7 @@ __Advertise server__
       * backend\_daemon.py, lockserver\_daemon.py
 	* -> notify the admins if critical processes are down
 
-__Software Update Server__
+#### Software Update Server
 - Is _softwareupdater.py_ running? 
   * Yes: nothing
   * No: notify sysadmins
@@ -93,7 +103,7 @@ __Software Update Server__
   * Yes: nothing, check if the update service is running
   * No: notify users -> set up the update service
 
-__Zenodotus__
+#### Zenodotus
 - Is _zenodotus\_advertise.repy_ running? 
   * No: notify sysadmins
   * Yes: return the node info associated with a domain name
