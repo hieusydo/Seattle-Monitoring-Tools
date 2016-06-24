@@ -1,0 +1,56 @@
+'''
+Author: Hieu Do 
+
+Start Date: June 23, 2016
+
+Description: 
+Check the status of the advertise server
+
+Usage: 
+python repy.py restrictions.default dylink.r2py centralizedmonitor.r2py
+
+Other notes:
+see rhizoma.mix L241 
+	- get_uservessels(keyname): use .publickey file to look up (centralizedadvertise_lookup)
+
+'''
+
+session = dy_import_module('session.r2py')
+sockettimeout = dy_import_module('sockettimeout.r2py')
+serialize = dy_import_module('serialize.r2py')
+
+# what other server name?
+# open port for advertiseserver: 22, 80, 111, 443, 10101, 10102, 37856, 54912
+servername = "advertiseserver.poly.edu"
+serverport = 10102
+
+# # timeout server
+# servername = "nonexistent"
+# serverport = 81
+
+'''
+---issues--- 				---exceptions---
+nonexistent host			NetworkAddressError
+					
+timeout 					TimeoutError
+
+no Internet 				still NetworkAddressError?? why not InternetConnectivityError
+connectivity
+'''	
+def checkServer(name, port):
+    try:
+        sockobj = sockettimeout.timeout_openconnection(
+            gethostbyname(name), port, timeout=10)
+    except RepyArgumentError:
+    	log("RepyArgumentError")
+    except ConnectionRefusedError:
+    	log("ConnectionRefusedError - Server " + str(name) + " is closed on port " + str(port) + ".\n")
+    except TimeoutError:
+        log("Time out error\n")
+    except NetworkAddressError:
+        log("NetworkAddressError - DNS lookup fail. Cannot locate " + str(name) + ".\n")
+    else:
+        log("Server " + str(name) + " is alive on port " + str(port) + ".\n")
+
+# test
+checkServer(servername, serverport)
