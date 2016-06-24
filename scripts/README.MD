@@ -1,4 +1,4 @@
-# How to run monitoring scripts for the advertise server
+# Instructions
 
 1. Follow the [Build Instructions](https://github.com/SeattleTestbed/docs/blob/master/Contributing/BuildInstructions.md) 
 to install all components of ```repy_v2``` and set up a runnable environment. 

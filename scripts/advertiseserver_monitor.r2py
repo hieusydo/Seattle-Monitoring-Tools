@@ -24,7 +24,7 @@ serialize = dy_import_module('serialize.r2py')
 servername = "advertiseserver.poly.edu"
 serverport = 10102
 
-# # timeout server
+# # timeout server for testing
 # servername = "nonexistent"
 # serverport = 81
 
@@ -37,6 +37,7 @@ timeout 					TimeoutError
 no Internet 				still NetworkAddressError?? why not InternetConnectivityError
 connectivity
 '''	
+# Integration Testing Framework will be implmented to send notifications
 def checkServer(name, port):
     try:
         sockobj = sockettimeout.timeout_openconnection(
