@@ -7,51 +7,60 @@ Description:
 Check the status of the advertise server
 
 Usage: 
-python repy.py restrictions.default dylink.r2py centralizedmonitor.r2py
+python repy.py restrictions.default dylink.r2py advertiseserver_monitor.r2py
 
 Other notes:
-see rhizoma.mix L241 
-	- get_uservessels(keyname): use .publickey file to look up (centralizedadvertise_lookup)
+- notification system will be implemented
+- see rhizoma.mix L241 
+  get_uservessels(keyname): use .publickey file to look up (centralizedadvertise_lookup)
 
 '''
 
-session = dy_import_module('session.r2py')
+# session = dy_import_module('session.r2py')
 sockettimeout = dy_import_module('sockettimeout.r2py')
-serialize = dy_import_module('serialize.r2py')
 
-# what other server name?
-# open port for advertiseserver: 22, 80, 111, 443, 10101, 10102, 37856, 54912
-servername = "advertiseserver.poly.edu"
-serverport = 10102
 
-# # timeout server for testing
-# servername = "nonexistent"
-# serverport = 81
-
-'''
----issues--- 				---exceptions---
-nonexistent host			NetworkAddressError
-					
-timeout 					TimeoutError
-
-no Internet 				still NetworkAddressError?? why not InternetConnectivityError
-connectivity
-'''	
-# Integration Testing Framework will be implmented to send notifications
-def checkServer(name, port):
+# Check if the server is alive or dead; if dead, why? 
+def checkServerStatus(name, port):
+  try:
+    # if domain name is nonexistent, there is no need to open a connection
+    serverip = gethostbyname(name)
+  except NetworkAddressError:
+    log("NetworkAddressError - Cannot resolve domain name '" + str(name) + "'. No connection is opened.\n")
+  else: 
     try:
-        sockobj = sockettimeout.timeout_openconnection(
-            gethostbyname(name), port, timeout=10)
-    except RepyArgumentError:
-    	log("RepyArgumentError")
+      # if domain name is resolved, try opening a connection
+      sockobj = sockettimeout.timeout_openconnection(serverip, port, timeout=10)
     except ConnectionRefusedError:
-    	log("ConnectionRefusedError - Server " + str(name) + " is closed on port " + str(port) + ".\n")
+      # occurs when trying to connect the server via a closed port
+      log("ConnectionRefusedError - Server '" + str(name) + "' is closed on port " + str(port) + ".\n")
     except TimeoutError:
-        log("Time out error\n")
-    except NetworkAddressError:
-        log("NetworkAddressError - DNS lookup fail. Cannot locate " + str(name) + ".\n")
+      log("Connection to '" + str(name) + "' on port " + str(port) + " causes a timeout.\n")
+    except InternetConnectivityError:
+      log("Network is down, or host cannot be reached from the local IP address.\n")
     else:
-        log("Server " + str(name) + " is alive on port " + str(port) + ".\n")
+      log("Server name '" + str(name) + "' is resolved. Connection is opened successfully on port " + str(port) + ".\n")
 
-# test
-checkServer(servername, serverport)
+
+# Test checkServerStatus
+# test the advertise server on an open port. Connection should be opened successfully.
+# Open ports for advertiseserver.poly.edu: 22, 80, 111, 443, 10101, 10102, 37856, 54912
+advertiseserver_name = "advertiseserver.poly.edu"
+advertiseserver_port = 10102
+checkServerStatus(advertiseserver_name, advertiseserver_port)
+
+# test the advertise server on a closed port. ConnectionRefusedError should be raised. 
+advertiseserver_closedport = 3333
+checkServerStatus(advertiseserver_name, advertiseserver_closedport)
+
+# test on a nonexistent domain
+nxdomain_name = "nonexistent"
+# does not matter which port because checkServerStatus would exit if gethostbyname(name) raises error
+nxdomain_port = 3333 
+checkServerStatus(nxdomain_name, nxdomain_port)
+
+# test on a timeout server
+timeoutserver_name = "google.com"
+timeoutserver_port = 81
+checkServerStatus(timeoutserver_name, timeoutserver_port)
+
