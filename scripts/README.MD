@@ -1,6 +1,6 @@
 # Instructions
 
 1. Follow the [Build Instructions](https://github.com/SeattleTestbed/docs/blob/master/Contributing/BuildInstructions.md) 
-to install all components of ```repy_v2``` and set up a runnable environment. 
-2. Copy the script files to the folder of all the installed components. 
-3. Follow the instructions in the _Usage_ section of the scripts.
+to install ```repy_v2``` and set up a runnable environment. 
+2. Copy ```advertiseserver_monitor``` file to the ```RUNNABLE``` folder. 
+3. Follow the instructions in the _Usage_ section of ```advertiseserver_monitor``` to run the script.
