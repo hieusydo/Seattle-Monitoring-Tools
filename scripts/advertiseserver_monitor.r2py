@@ -9,15 +9,13 @@ Check the status of the advertise server
 Usage: 
 python repy.py restrictions.default dylink.r2py advertiseserver_monitor.r2py
 
-Other notes:
-- notification system will be implemented
-- see rhizoma.mix L241 
-  get_uservessels(keyname): use .publickey file to look up (centralizedadvertise_lookup)
-
 '''
 
 # session = dy_import_module('session.r2py')
 sockettimeout = dy_import_module('sockettimeout.r2py')
+dy_import_module_symbols('rsa.r2py')
+dy_import_module_symbols('centralizedadvertise.r2py')
+dy_import_module_symbols('centralizedadvertise_v2.r2py')
 
 
 # Check if the server is alive or dead; if dead, why? 
@@ -26,7 +24,7 @@ def checkServerStatus(name, port):
     # if domain name is nonexistent, there is no need to open a connection
     serverip = gethostbyname(name)
   except NetworkAddressError:
-    log("NetworkAddressError - Cannot resolve domain name '" + str(name) + "'. No connection is opened.\n")
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(name) + "'. No connection is opened.\n")
   else: 
     try:
       # if domain name is resolved, try opening a connection
@@ -41,26 +39,96 @@ def checkServerStatus(name, port):
     else:
       log("Server name '" + str(name) + "' is resolved. Connection is opened successfully on port " + str(port) + ".\n")
 
+def checkUDPServerStatus(name, port):
+  pass
 
-# Test checkServerStatus
-# test the advertise server on an open port. Connection should be opened successfully.
-# Open ports for advertiseserver.poly.edu: 22, 80, 111, 443, 10101, 10102, 37856, 54912
-advertiseserver_name = "advertiseserver.poly.edu"
-advertiseserver_port = 10102
-checkServerStatus(advertiseserver_name, advertiseserver_port)
+# # return a list of vessels' IPs assigned to the keyname
+# def get_uservessels(keyname):
+#   """Return the given user's GENI vessels"""
 
-# test the advertise server on a closed port. ConnectionRefusedError should be raised. 
-advertiseserver_closedport = 3333
-checkServerStatus(advertiseserver_name, advertiseserver_closedport)
+#   # check with advertiser
+#   key_public = rsa_file_to_publickey(keyname + ".publickey")
+#   raw_hosts = centralizedadvertise_lookup(key_public)
 
-# test on a nonexistent domain
-nxdomain_name = "nonexistent"
-# does not matter which port because checkServerStatus would exit if gethostbyname(name) raises error
-nxdomain_port = 3333 
-checkServerStatus(nxdomain_name, nxdomain_port)
+#   # BUG in centralizedadvertise.  Should return [].
+#   if raw_hosts == ['']:
+#     raw_hosts = []
 
-# test on a timeout server
-timeoutserver_name = "google.com"
-timeoutserver_port = 81
-checkServerStatus(timeoutserver_name, timeoutserver_port)
+#   hosts = []
 
+#   # strip off the port
+#   for raw_host in raw_hosts:
+#     host, port = raw_host.split(':')
+#     hosts += [host]
+
+#   return hosts
+
+# test announce/lookup of centralized advertise server
+def testCentralAdvertise(key, value, ttlval):
+  log("Anouncing the test pair <" + str(key) + ", " 
+    + str(value) + "> expired in " + str(ttlval) + "s\n")
+  centralizedadvertise_announce(key, value, ttlval)
+  log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+    + str(centralizedadvertise_lookup(key)) + "\n")
+  sleep(ttlval)
+  log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+    + str(centralizedadvertise_lookup(key)) + "\n")
+
+# test announce/lookup of v2 centralized advertise server
+def testCentralAdvertise_v2(key, value, ttlval):
+  log("Anouncing the test pair <" + str(key) + ", " 
+    + str(value) + "> expired in " + str(ttlval) + "s\n")
+  v2centralizedadvertise_announce(key, value, ttlval)
+  log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+    + str(v2centralizedadvertise_lookup(key)) + "\n")
+  sleep(ttlval)
+  log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+    + str(v2centralizedadvertise_lookup(key)) + "\n")
+
+# test announce/lookup of UDP advertise server
+def testUDPAdvertise(key, value, ttval):
+  pass
+
+
+if callfunc == 'initialize':
+  '''
+  Test cases for checkServerStatus
+  '''
+  # test the advertise server on an open port. Connection should be opened successfully.
+  # Open ports for advertiseserver.poly.edu: 22, 80, 111, 443, 10101, 10102, 37856, 54912
+  central_servername = "advertiseserver.poly.edu"
+  central_serverport = 10102
+  checkServerStatus(central_servername, central_serverport)
+
+  # test the advertise server on a closed port. ConnectionRefusedError should be raised. 
+  advertiseserver_closedport = 3333
+  checkServerStatus(central_servername, advertiseserver_closedport)
+
+  # test on a nonexistent domain
+  nxdomain_name = "nonexistent"
+  # does not matter which port because checkServerStatus would exit if gethostbyname(name) raises error
+  nxdomain_port = 3333 
+  checkServerStatus(nxdomain_name, nxdomain_port)
+
+  # test on a timeout server
+  timeoutserver_name = "google.com"
+  timeoutserver_port = 81
+  checkServerStatus(timeoutserver_name, timeoutserver_port)
+
+  # test o 
+  central_v2_servername = "advertiseserver_v2.poly.edu"
+  central_v2_serverport = 10102
+  checkServerStatus(central_v2_servername, central_v2_serverport)
+
+  # udp_servername = "udpadvertiseserver.poly.edu"
+  # udp_serverport = 10102
+  # checkServerStatus(udp_servername, udp_serverport)
+
+  # hosts = get_uservessels('hieudo')
+  # log(str(hosts) + "\n")
+
+  '''
+  Test announce/lookup
+  '''
+  testCentralAdvertise("asdfghjk", "1.1.1.1", 10)
+  # testCentralAdvertise_v2("qwerty", "1.1.1.2", 5)
