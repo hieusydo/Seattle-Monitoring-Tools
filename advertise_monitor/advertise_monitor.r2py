@@ -7,7 +7,7 @@ Description:
 Check the status of the advertise server
 
 Usage: 
-python repy.py restrictions.default dylink.r2py advertiseserver_monitor.r2py
+python repy.py restrictions.default dylink.r2py advertise_monitor.r2py
 
 '''
 

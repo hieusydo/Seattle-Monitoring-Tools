@@ -1,0 +1,11 @@
+./*
+DEPENDENCIES/seattlelib_v2/*
+DEPENDENCIES/repy_v2/*
+DEPENDENCIES/portability/*
+DEPENDENCIES/common/*
+DEPENDENCIES/nodemanager/*
+
+# Tests
+test DEPENDENCIES/utf/*
+test test/*
+test DEPENDENCIES/nodemanager/nminit.py
