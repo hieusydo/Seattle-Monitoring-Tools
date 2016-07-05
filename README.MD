@@ -33,11 +33,10 @@ To consider:
   * announce and lookup a test _<key, value>_ pair
 - central_v2
   * check status of ```advertiseserver_v2.poly.edu``` (port 10102): same as with central
-  * __[PROBLEM]__ attempts to announce a pair raises ```Exception (with class '.SocketTimeoutError'): recv() timed out!!```, while connection to ```advertiseserver_v2.poly.edu``` is successful. [Issue #182](https://github.com/SeattleTestbed/seattlelib_v2/issues/182)
+  * announce and lookup a test _<key, value>_ pair
 - udpcentral
-  * check if UDP server is listening 
-  * announce and lookup test
-
+  * check if domain name of UDP server exists
+  * announce and lookup test to see if the server is listening
 
 #### Software Updater
 
