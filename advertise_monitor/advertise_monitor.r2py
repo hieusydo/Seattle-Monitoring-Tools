@@ -1,0 +1,142 @@
+'''
+
+Author: Hieu Do 
+
+Start Date: June 6, 2016
+
+Description: 
+Check the status of the advertise server (central, central_v2, and udpcentral)
+
+Usage: 
+python repy.py restrictions.default dylink.r2py advertise_monitor.r2py
+
+'''
+
+# session = dy_import_module('session.r2py')
+sockettimeout = dy_import_module('sockettimeout.r2py')
+dy_import_module_symbols('rsa.r2py')
+dy_import_module_symbols('centralizedadvertise.r2py')
+dy_import_module_symbols('centralizedadvertise_v2.r2py')
+dy_import_module_symbols('udpcentralizedadvertise.r2py')
+
+'''
+How to raise different exceptions for testing:
+ConnectionRefusedError -- change serverport to a closed port
+NetworkAddressError -- change the servername to a non-existent domain
+TimeoutError -- change servername to "google.com" and serverport to 81 
+                (this is just a sample timeout server)
+'''
+central_servername = "advertiseserver.poly.edu"
+central_serverport = 10102
+
+central_v2_servername = "advertiseserver_v2.poly.edu"
+central_v2_serverport = 10102
+
+udp_servername = "udpadvertiseserver.poly.edu"
+udp_serverport = 10102
+
+# helper function to check the server's status alive or dead, and why? 
+def _checkServerStatus(name, port):
+  try:
+    # if domain name is nonexistent, there is no need to open a connection
+    serverip = gethostbyname(name)
+  except NetworkAddressError:
+    raise
+  else: 
+    try:
+      # if domain name is resolved, try opening a connection
+      sockobj = sockettimeout.timeout_openconnection(serverip, port, timeout=10)
+    except ConnectionRefusedError:
+      # occurs when trying to connect the server via a closed port
+      raise
+    except TimeoutError:
+      raise
+    except InternetConnectivityError:
+      raise
+    else:
+      log("Server name '" + str(name) + "' is resolved. Connection is opened successfully on port " + str(port) + ".\n")
+
+# helper function to check the domain name of the UDP server
+def _checkUDPDomain(name, port):
+  try:
+    serverip = gethostbyname(name)
+  except NetworkAddressError:
+    raise
+  else:
+    log("Server name '" + str(name) + "' is resolved.\n")   
+
+# test announce/lookup of centralized advertise server
+def testCentralAdvertise(key, value, ttlval=10):
+  try:
+    _checkServerStatus(central_servername, central_serverport)
+  except NetworkAddressError:
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(central_servername) + "'. No connection is opened.\n")    
+  except ConnectionRefusedError:
+    log("ConnectionRefusedError - Server '" + str(central_servername) + "' is closed on port " + str(central_serverport) + ".\n")
+  except TimeoutError:
+      log("Connection to '" + str(central_servername) + "' on port " + str(central_serverport) + " causes a timeout.\n")
+  except InternetConnectivityError:
+      log("Network is down, or host cannot be reached from the local IP address.\n")
+  else:
+    log("Anouncing the test pair <" + str(key) + ", " 
+      + str(value) + "> expired in " + str(ttlval) + "s\n")
+    centralizedadvertise_announce(key, value, ttlval)
+    log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+      + str(centralizedadvertise_lookup(key)) + "\n")
+    # sleep(ttlval)
+    # log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+    #   + str(centralizedadvertise_lookup(key)) + "\n")
+  log("===============\n")
+
+# test announce/lookup of v2 centralized advertise server
+def testCentralAdvertise_v2(key, value, ttlval):
+  try:
+    _checkServerStatus(central_v2_servername, central_v2_serverport)
+  except NetworkAddressError:
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(central_servername) + "'. No connection is opened.\n")    
+  except ConnectionRefusedError:
+    log("ConnectionRefusedError - Server '" + str(central_servername) + "' is closed on port " + str(central_serverport) + ".\n")
+  except TimeoutError:
+      log("Connection to '" + str(central_servername) + "' on port " + str(central_serverport) + " causes a timeout.\n")
+  except InternetConnectivityError:
+      log("Network is down, or host cannot be reached from the local IP address.\n")
+  else:
+    log("Anouncing the test pair <" + str(key) + ", " 
+      + str(value) + "> expired in " + str(ttlval) + "s\n")
+    v2centralizedadvertise_announce(key, value, ttlval)
+    log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+      + str(v2centralizedadvertise_lookup(key)) + "\n")
+    # sleep(ttlval)
+    # log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+    #   + str(v2centralizedadvertise_lookup(key)) + "\n")
+  log("===============\n")
+
+# test announce/lookup of UDP advertise server
+def testUDPAdvertise(key, value, ttlval):
+  try: 
+    _checkUDPDomain(udp_servername, udp_serverport)
+  except NetworkAddressError:
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(udp_servername) + "'.\n")        
+  else:
+    try: 
+      log("Anouncing the test pair <" + str(key) + ", " 
+        + str(value) + "> expired in " + str(ttlval) + "s\n")
+      udpcentralizedadvertise_announce(key, value, ttlval)
+      log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+        + str(udpcentralizedadvertise_lookup(key)) + "\n")
+      # sleep(ttlval)
+      # log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
+      #   + str(udpcentralizedadvertise_lookup(key)) + "\n")    
+    except UDPCentralAdvertiseError:
+      log("UDP server timed out.\n")
+  log("===============\n")      
+
+
+if callfunc == 'initialize':
+  '''
+  Test announce/lookup
+  '''
+  testCentralAdvertise("asdfghjk_central", "1.1.1.1", 10)
+  testCentralAdvertise_v2("qwerty_central_v2", "1.1.1.2", 15)
+  testUDPAdvertise("asdfgh_udp", "1.1.1.5" , 10)
+
