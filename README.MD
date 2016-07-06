@@ -39,6 +39,9 @@ To consider:
   * announce and lookup test to see if the server is listening
 
 #### Software Updater
+- SoftwareUpdater URL: `https://seattle.poly.edu/updatesite/` - SoftwareUpdater server: `seattle.poly.edu`
+- Currently, I monitor the software updater server by checking the status of the server and implementing a python script to get the last modified dates of all the files on the site. 
+- I have yet found what else to monitor in the Software Updater beside checking the status of the server. The process of validating the public keys and signatures is already implemented in `softwareupdater.py`
 
 #### Zenodotus 
 
