@@ -1,4 +1,4 @@
-## How to run the advertise service monitoring scripts
+## Instructions
 
 #### For ```.r2py``` files
 1. Run ```initialize.py``` and ```build.py``` in the ```script/``` folder to clone all dependent repositories of a Seattle component. 
