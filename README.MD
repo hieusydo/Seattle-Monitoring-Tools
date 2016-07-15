@@ -8,14 +8,21 @@
 
 ## Design and Implementation Overview
 
-### 1. Target to monitor
-- Advertising Service: central, central_v2, udpcentral
-- Software Updater
-- Zenodotus 
-- Custom Installer Builder
+### 1. Targets to monitor
+- Infrastructure Components:
+  - Clearinghouse
+  - Custom Installer Builder
+  - Software Updater Site 
+- Services: 
+  - Advertising Service: central, central_v2, udpcentral
+  - Zenodotus 
+- Components: 
+  - VM/Vessels
+  - Node Mananger
+  - Experiment Mananger  
 - Targets already monitored: 
-  * disk space (```monitor_disk.py```)
-  * resource violation (```nanny.py```)
+  * disk space (`monitor_disk.py`)
+  * resource violation (`nanny.py`)
   * vessel info (checked in the installer)
 
 ### 2. How to monitor
@@ -27,12 +34,12 @@ To consider:
 
 #### Advertising Service
 - central 
-  * check status of ```advertiseserver.poly.edu``` (port 10102) by first validating the hostname and then trying to open a connection to the hostname
+  * check status of `advertiseserver.poly.edu` (port 10102) by first validating the hostname and then trying to open a connection to the hostname
     * alive
     * dead -> why? _NetworkAddressError_, _ConnectionRefusedError_, _TimeoutError_, _InternetConnectivityError_
   * announce and lookup a test _<key, value>_ pair
 - central_v2
-  * check status of ```advertiseserver_v2.poly.edu``` (port 10102): same as with central
+  * check status of `advertiseserver_v2.poly.edu` (port 10102): same as with central
   * announce and lookup a test _<key, value>_ pair
 - udpcentral
   * check if domain name of UDP server exists
@@ -40,14 +47,21 @@ To consider:
 
 #### Software Updater
 - SoftwareUpdater URL: `https://seattle.poly.edu/updatesite/` - SoftwareUpdater server: `seattle.poly.edu`
-- Currently, I monitor the software updater server by checking the status of the server and implementing a python script to get the last modified dates of all the files on the site. 
-- I have yet found what else to monitor in the Software Updater beside checking the status of the server. The process of validating the public keys and signatures is already implemented in `softwareupdater.py`
+- Check the status of the server (as with the advertise server)
+- Check if the updater site delivers the correct updates by checking the signatures in a downloaded metainfo 
 
-#### Zenodotus 
-
-#### Custom Installer Builder
-
-<!-- ### Monitoring Pipeline
+<!-- ## Monitoring Pipeline
 
 <img src="https://github.com/hieusydo/Seattle-Monitoring-Tools/blob/master/img/monitor-pipline.png" width="750" />
  -->
+
+## Instructions 
+1. Go to the `script/` folder:
+  1. Run `initialize.py` to clone all dependent repositories of a Seattle component. 
+  1. Run `build.py` to create a runnable environment for the monitoring scripts
+1. Go to the `RUNNABLE` folder to run `advertise_monitor.r2py` or `updater_monitor.py`
+
+
+
+
+

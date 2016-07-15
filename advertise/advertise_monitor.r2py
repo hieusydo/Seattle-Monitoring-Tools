@@ -36,7 +36,7 @@ udp_servername = "udpadvertiseserver.poly.edu"
 udp_serverport = 10102
 
 # helper function to check the server's status alive or dead, and why? 
-def _checkServerStatus(name, port):
+def checkServerStatus(name, port):
   try:
     # if domain name is nonexistent, there is no need to open a connection
     serverip = gethostbyname(name)
@@ -68,7 +68,7 @@ def _checkUDPDomain(name, port):
 # test announce/lookup of centralized advertise server
 def testCentralAdvertise(key, value, ttlval=10):
   try:
-    _checkServerStatus(central_servername, central_serverport)
+    checkServerStatus(central_servername, central_serverport)
   except NetworkAddressError:
     log("NetworkAddressError - Cannot resolve the hostname '" + str(central_servername) + "'. No connection is opened.\n")    
   except ConnectionRefusedError:
@@ -91,7 +91,7 @@ def testCentralAdvertise(key, value, ttlval=10):
 # test announce/lookup of v2 centralized advertise server
 def testCentralAdvertise_v2(key, value, ttlval):
   try:
-    _checkServerStatus(central_v2_servername, central_v2_serverport)
+    checkServerStatus(central_v2_servername, central_v2_serverport)
   except NetworkAddressError:
     log("NetworkAddressError - Cannot resolve the hostname '" + str(central_servername) + "'. No connection is opened.\n")    
   except ConnectionRefusedError:

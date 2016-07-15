@@ -4,3 +4,4 @@ https://github.com/SeattleTestbed/repy_v2 ../DEPENDENCIES/repy_v2
 https://github.com/SeattleTestbed/common ../DEPENDENCIES/common
 https://github.com/SeattleTestbed/nodemanager ../DEPENDENCIES/nodemanager
 https://github.com/SeattleTestbed/utf ../DEPENDENCIES/utf
+https://github.com/SeattleTestbed/softwareupdater ../DEPENDENCIES/softwareupdater
