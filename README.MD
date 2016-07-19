@@ -8,7 +8,7 @@
 
 ## Design and Implementation Overview
 
-### Targets to monitor
+### a. Targets to monitor
 - Infrastructure Components:
   - Clearinghouse
   - Custom Installer Builder
@@ -26,7 +26,7 @@
   * resource violation (`nanny.py`)
   * vessel info (checked in the installer)
 
-### How to monitor
+### b. How to monitor
 To consider: 
 - metrics: availability, performance, usage, etc.
 - location: local machine, node manager, Seattle server, Clearinghouse server, etc.
@@ -56,15 +56,18 @@ To consider:
 - Use advertise service to check that multiples nodes' IP addresses are registered to a single hostname
 
 #### Time
+- Make an NTP query and compare the returned time with the local time on the machine
 
 #### Clearinghouse
+- Monitoring methods already implemented? 
 
 #### Custom Installer Builder
+- Monitoring methods already implemented? 
 
-### Notifications
+### c. Notifications
+- `send_gmail.py` module
 
-## Monitoring Pipeline
-
+## Monitoring Pipelines
 
 
 
