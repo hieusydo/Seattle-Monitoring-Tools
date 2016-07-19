@@ -14,10 +14,10 @@ python repy.py restrictions.default dylink.r2py advertise_monitor.r2py
 
 # session = dy_import_module('session.r2py')
 sockettimeout = dy_import_module('sockettimeout.r2py')
-dy_import_module_symbols('rsa.r2py')
-dy_import_module_symbols('centralizedadvertise.r2py')
-dy_import_module_symbols('centralizedadvertise_v2.r2py')
-dy_import_module_symbols('udpcentralizedadvertise.r2py')
+central = dy_import_module('centralizedadvertise.r2py')
+v2central = dy_import_module('centralizedadvertise_v2.r2py')
+udp = dy_import_module('udpcentralizedadvertise.r2py')
+
 
 '''
 How to raise different exceptions for testing:
@@ -26,15 +26,6 @@ NetworkAddressError -- change the servername to a non-existent domain
 TimeoutError -- change servername to "google.com" and serverport to 81 
                 (this is just a sample timeout server)
 '''
-central_servername = "advertiseserver.poly.edu"
-central_serverport = 10102
-
-central_v2_servername = "advertiseserver_v2.poly.edu"
-central_v2_serverport = 10102
-
-udp_servername = "udpadvertiseserver.poly.edu"
-udp_serverport = 10102
-
 # helper function to check the server's status alive or dead, and why? 
 def checkServerStatus(name, port):
   try:
@@ -68,21 +59,21 @@ def _checkUDPDomain(name, port):
 # test announce/lookup of centralized advertise server
 def testCentralAdvertise(key, value, ttlval=10):
   try:
-    checkServerStatus(central_servername, central_serverport)
+    checkServerStatus(central.servername, central.serverport)
   except NetworkAddressError:
-    log("NetworkAddressError - Cannot resolve the hostname '" + str(central_servername) + "'. No connection is opened.\n")    
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(central.servername) + "'. No connection is opened.\n")    
   except ConnectionRefusedError:
-    log("ConnectionRefusedError - Server '" + str(central_servername) + "' is closed on port " + str(central_serverport) + ".\n")
+    log("ConnectionRefusedError - Server '" + str(central.servername) + "' is closed on port " + str(central.serverport) + ".\n")
   except TimeoutError:
-      log("Connection to '" + str(central_servername) + "' on port " + str(central_serverport) + " causes a timeout.\n")
+      log("Connection to '" + str(central.servername) + "' on port " + str(central.serverport) + " causes a timeout.\n")
   except InternetConnectivityError:
       log("Network is down, or host cannot be reached from the local IP address.\n")
   else:
     log("Anouncing the test pair <" + str(key) + ", " 
       + str(value) + "> expired in " + str(ttlval) + "s\n")
-    centralizedadvertise_announce(key, value, ttlval)
+    central.centralizedadvertise_announce(key, value, ttlval)
     log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
-      + str(centralizedadvertise_lookup(key)) + "\n")
+      + str(central.centralizedadvertise_lookup(key)) + "\n")
     # sleep(ttlval)
     # log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
     #   + str(centralizedadvertise_lookup(key)) + "\n")
@@ -91,21 +82,21 @@ def testCentralAdvertise(key, value, ttlval=10):
 # test announce/lookup of v2 centralized advertise server
 def testCentralAdvertise_v2(key, value, ttlval):
   try:
-    checkServerStatus(central_v2_servername, central_v2_serverport)
+    checkServerStatus(v2central.v2servername, v2central.v2serverport)
   except NetworkAddressError:
-    log("NetworkAddressError - Cannot resolve the hostname '" + str(central_servername) + "'. No connection is opened.\n")    
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(v2central.v2servername) + "'. No connection is opened.\n")    
   except ConnectionRefusedError:
-    log("ConnectionRefusedError - Server '" + str(central_servername) + "' is closed on port " + str(central_serverport) + ".\n")
+    log("ConnectionRefusedError - Server '" + str(v2central.v2servername) + "' is closed on port " + str(v2central.v2serverport) + ".\n")
   except TimeoutError:
-      log("Connection to '" + str(central_servername) + "' on port " + str(central_serverport) + " causes a timeout.\n")
+      log("Connection to '" + str(v2central.v2servername) + "' on port " + str(v2central.v2serverport) + " causes a timeout.\n")
   except InternetConnectivityError:
       log("Network is down, or host cannot be reached from the local IP address.\n")
   else:
     log("Anouncing the test pair <" + str(key) + ", " 
       + str(value) + "> expired in " + str(ttlval) + "s\n")
-    v2centralizedadvertise_announce(key, value, ttlval)
+    v2central.v2centralizedadvertise_announce(key, value, ttlval)
     log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
-      + str(v2centralizedadvertise_lookup(key)) + "\n")
+      + str(v2central.v2centralizedadvertise_lookup(key)) + "\n")
     # sleep(ttlval)
     # log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
     #   + str(v2centralizedadvertise_lookup(key)) + "\n")
@@ -114,16 +105,16 @@ def testCentralAdvertise_v2(key, value, ttlval):
 # test announce/lookup of UDP advertise server
 def testUDPAdvertise(key, value, ttlval):
   try: 
-    _checkUDPDomain(udp_servername, udp_serverport)
+    _checkUDPDomain(udp.udpservername, udp.udpserverport)
   except NetworkAddressError:
-    log("NetworkAddressError - Cannot resolve the hostname '" + str(udp_servername) + "'.\n")        
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(udp.udpservername) + "'.\n")        
   else:
     try: 
       log("Anouncing the test pair <" + str(key) + ", " 
         + str(value) + "> expired in " + str(ttlval) + "s\n")
-      udpcentralizedadvertise_announce(key, value, ttlval)
+      udp.udpcentralizedadvertise_announce(key, value, ttlval)
       log("Within " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
-        + str(udpcentralizedadvertise_lookup(key)) + "\n")
+        + str(udp.udpcentralizedadvertise_lookup(key)) + "\n")
       # sleep(ttlval)
       # log("After " + str(ttlval) + "s, lookup result for '" + str(key) + "': " 
       #   + str(udpcentralizedadvertise_lookup(key)) + "\n")    
