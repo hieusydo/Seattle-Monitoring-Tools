@@ -1,14 +1,14 @@
 # Seatte Monitoring Tools
 
-<!-- ### Table of Content
-1. [Design and Implementation Questions](https://github.com/hieusydo/Seattle-Monitoring-Tools#1-design-and-implementation-questions)
-  * [Target to monitor](https://github.com/hieusydo/Seattle-Monitoring-Tools#target-to-monitor)
-  * [What metrics](https://github.com/hieusydo/Seattle-Monitoring-Tools#what-metrics)
--->
+## Instructions 
+1. Go to the `script/` folder:
+  1. Run `initialize.py` to clone all dependent repositories of a Seattle component. 
+  1. Run `build.py` to create a runnable environment for the monitoring scripts
+1. Go to the `RUNNABLE` folder to run `advertise_monitor.r2py` or `updater_monitor.py`
 
 ## Design and Implementation Overview
 
-### 1. Targets to monitor
+### Targets to monitor
 - Infrastructure Components:
   - Clearinghouse
   - Custom Installer Builder
@@ -16,6 +16,7 @@
 - Services: 
   - Advertising Service: central, central_v2, udpcentral
   - Zenodotus 
+  - Time
 - Components: 
   - VM/Vessels
   - Node Mananger
@@ -25,7 +26,7 @@
   * resource violation (`nanny.py`)
   * vessel info (checked in the installer)
 
-### 2. How to monitor
+### How to monitor
 To consider: 
 - metrics: availability, performance, usage, etc.
 - location: local machine, node manager, Seattle server, Clearinghouse server, etc.
@@ -46,20 +47,25 @@ To consider:
   * announce and lookup test to see if the server is listening
 
 #### Software Updater
-- SoftwareUpdater URL: `https://seattle.poly.edu/updatesite/` - SoftwareUpdater server: `seattle.poly.edu`
 - Check the status of the server (as with the advertise server)
+  URL: `https://seattle.poly.edu/updatesite/`. Servername: `seattle.poly.edu`
 - Check if the updater site delivers the correct updates by checking the signatures in a downloaded metainfo 
 
-<!-- ## Monitoring Pipeline
+#### Zenodotus
+- Check status of Zenodotus server. Servername: `zenodotus.poly.edu` - IP address: `128.238.63.50`
+- Use advertise service to check that multiples nodes' IP addresses are registered to a single hostname
 
-<img src="https://github.com/hieusydo/Seattle-Monitoring-Tools/blob/master/img/monitor-pipline.png" width="750" />
- -->
+#### Time
 
-## Instructions 
-1. Go to the `script/` folder:
-  1. Run `initialize.py` to clone all dependent repositories of a Seattle component. 
-  1. Run `build.py` to create a runnable environment for the monitoring scripts
-1. Go to the `RUNNABLE` folder to run `advertise_monitor.r2py` or `updater_monitor.py`
+#### Clearinghouse
+
+#### Custom Installer Builder
+
+### Notifications
+
+## Monitoring Pipeline
+
+
 
 
 
