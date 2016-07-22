@@ -57,12 +57,16 @@ To consider:
 
 #### Time
 - Make an NTP query and compare the returned time with the local time on the machine
+- Different ways to find the timeservers: 1 server
 
-#### Clearinghouse
-- Monitoring methods already implemented? 
-
-#### Custom Installer Builder
-- Monitoring methods already implemented? 
+#### Clearinghouse & Custom Installer Builder
+- Use `wget` to download the website 
+  - `https://seattleclearinghouse.poly.edu/`
+  - `https://sensibilityclearinghouse.poly.edu/custominstallerbuilder/`
+- Record the time, number of files, download speed KB/s
+- Analyze the raw data: 
+  - min, max, average, median
+  - compare with the production Clearinghouse's
 
 ### c. Notifications
 - `send_gmail.py` module
