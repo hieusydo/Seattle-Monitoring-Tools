@@ -22,7 +22,7 @@ _context = locals()
 add_dy_support(_context)
 
 signeddata = dy_import_module("signeddata.r2py")
-advertise_monitor = dy_import_module("advertise_monitor.r2py")
+serverstatus = dy_import_module("serverstatus.r2py")
 
 updatereurl = "https://seattle.poly.edu/updatesite/"
 
@@ -32,7 +32,7 @@ updater_serverport = 443 # https port obtain from `nmap 128.238.63.51`
 
 def main():
   # check the status of the advertise server
-  advertise_monitor.checkServerStatus(updater_servername, updater_serverport)
+  serverstatus.checkServerStatus(updater_servername, updater_serverport)
 
   # download a temp 'metainfo' file
   tempdir = tempfile.mkdtemp()+"/"

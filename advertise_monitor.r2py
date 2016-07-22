@@ -12,54 +12,15 @@ python repy.py restrictions.default dylink.r2py advertise_monitor.r2py
 
 '''
 
-# session = dy_import_module('session.r2py')
-sockettimeout = dy_import_module('sockettimeout.r2py')
+serverstatus = dy_import_module('serverstatus.r2py')
 central = dy_import_module('centralizedadvertise.r2py')
 v2central = dy_import_module('centralizedadvertise_v2.r2py')
-udp = dy_import_module('udpcentralizedadvertise.r2py')
-
-
-'''
-How to raise different exceptions for testing:
-ConnectionRefusedError -- change serverport to a closed port
-NetworkAddressError -- change the servername to a non-existent domain
-TimeoutError -- change servername to "google.com" and serverport to 81 
-                (this is just a sample timeout server)
-'''
-# helper function to check the server's status alive or dead, and why? 
-def checkServerStatus(name, port):
-  try:
-    # if domain name is nonexistent, there is no need to open a connection
-    serverip = gethostbyname(name)
-  except NetworkAddressError:
-    raise
-  else: 
-    try:
-      # if domain name is resolved, try opening a connection
-      sockobj = sockettimeout.timeout_openconnection(serverip, port, timeout=10)
-    except ConnectionRefusedError:
-      # occurs when trying to connect the server via a closed port
-      raise
-    except TimeoutError:
-      raise
-    except InternetConnectivityError:
-      raise
-    else:
-      log("Server name '" + str(name) + "' is resolved. Connection is opened successfully on port " + str(port) + ".\n")
-
-# helper function to check the domain name of the UDP server
-def _checkUDPDomain(name, port):
-  try:
-    serverip = gethostbyname(name)
-  except NetworkAddressError:
-    raise
-  else:
-    log("Server name '" + str(name) + "' is resolved.\n")   
+udp = dy_import_module('udpcentralizedadvertise.r2py') 
 
 # test announce/lookup of centralized advertise server
 def testCentralAdvertise(key, value, ttlval=10):
   try:
-    checkServerStatus(central.servername, central.serverport)
+    serverstatus.checkServerStatus(central.servername, central.serverport)
   except NetworkAddressError:
     log("NetworkAddressError - Cannot resolve the hostname '" + str(central.servername) + "'. No connection is opened.\n")    
   except ConnectionRefusedError:
@@ -82,7 +43,7 @@ def testCentralAdvertise(key, value, ttlval=10):
 # test announce/lookup of v2 centralized advertise server
 def testCentralAdvertise_v2(key, value, ttlval):
   try:
-    checkServerStatus(v2central.v2servername, v2central.v2serverport)
+    serverstatus.checkServerStatus(v2central.v2servername, v2central.v2serverport)
   except NetworkAddressError:
     log("NetworkAddressError - Cannot resolve the hostname '" + str(v2central.v2servername) + "'. No connection is opened.\n")    
   except ConnectionRefusedError:
@@ -105,7 +66,7 @@ def testCentralAdvertise_v2(key, value, ttlval):
 # test announce/lookup of UDP advertise server
 def testUDPAdvertise(key, value, ttlval):
   try: 
-    _checkUDPDomain(udp.udpservername, udp.udpserverport)
+    serverstatus.checkDomain(udp.udpservername, udp.udpserverport)
   except NetworkAddressError:
     log("NetworkAddressError - Cannot resolve the hostname '" + str(udp.udpservername) + "'.\n")        
   else:

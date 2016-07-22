@@ -1,5 +1,4 @@
-advertise/advertise_monitor.r2py
-updater/updater_monitor.py
+./*
 DEPENDENCIES/seattlelib_v2/*
 DEPENDENCIES/repy_v2/*
 DEPENDENCIES/portability/*

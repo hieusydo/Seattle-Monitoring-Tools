@@ -1,0 +1,48 @@
+'''
+
+Author: Hieu Do 
+
+Start Date: June 6, 2016
+
+Description: 
+Check the status of a given server: up or down; if down, why?
+
+How to raise different exceptions for testing:
+ConnectionRefusedError -- change serverport to a closed port
+NetworkAddressError -- change the servername to a non-existent domain
+TimeoutError -- change servername to "google.com" and serverport to 81 
+                (this is just a sample timeout server)
+
+'''
+
+sockettimeout = dy_import_module('sockettimeout.r2py')
+
+# helper function to check the server's status alive or dead, and why? 
+def checkServerStatus(name, port):
+  try:
+    # if domain name is nonexistent, there is no need to open a connection
+    serverip = gethostbyname(name)
+  except NetworkAddressError:
+    raise
+  else: 
+    try:
+      # if domain name is resolved, try opening a connection
+      sockobj = sockettimeout.timeout_openconnection(serverip, port, timeout=10)
+    except ConnectionRefusedError:
+      # occurs when trying to connect the server via a closed port
+      raise
+    except TimeoutError:
+      raise
+    except InternetConnectivityError:
+      raise
+    else:
+      log("Server name '" + str(name) + "' is resolved. Connection is opened successfully on port " + str(port) + ".\n")
+
+# helper function to check the domain name of the UDP server
+def checkDomain(name, port):
+  try:
+    serverip = gethostbyname(name)
+  except NetworkAddressError:
+    raise
+  else:
+    log("Server name '" + str(name) + "' is resolved.\n")
