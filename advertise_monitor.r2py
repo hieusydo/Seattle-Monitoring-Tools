@@ -19,17 +19,7 @@ udp = dy_import_module('udpcentralizedadvertise.r2py')
 
 # test announce/lookup of centralized advertise server
 def testCentralAdvertise(key, value, ttlval=10):
-  try:
-    serverstatus.checkServerStatus(central.servername, central.serverport)
-  except NetworkAddressError:
-    log("NetworkAddressError - Cannot resolve the hostname '" + str(central.servername) + "'. No connection is opened.\n")    
-  except ConnectionRefusedError:
-    log("ConnectionRefusedError - Server '" + str(central.servername) + "' is closed on port " + str(central.serverport) + ".\n")
-  except TimeoutError:
-      log("Connection to '" + str(central.servername) + "' on port " + str(central.serverport) + " causes a timeout.\n")
-  except InternetConnectivityError:
-      log("Network is down, or host cannot be reached from the local IP address.\n")
-  else:
+  if serverstatus.checkServerStatus(central.servername, central.serverport):
     log("Anouncing the test pair <" + str(key) + ", " 
       + str(value) + "> expired in " + str(ttlval) + "s\n")
     central.centralizedadvertise_announce(key, value, ttlval)
@@ -42,17 +32,7 @@ def testCentralAdvertise(key, value, ttlval=10):
 
 # test announce/lookup of v2 centralized advertise server
 def testCentralAdvertise_v2(key, value, ttlval):
-  try:
-    serverstatus.checkServerStatus(v2central.v2servername, v2central.v2serverport)
-  except NetworkAddressError:
-    log("NetworkAddressError - Cannot resolve the hostname '" + str(v2central.v2servername) + "'. No connection is opened.\n")    
-  except ConnectionRefusedError:
-    log("ConnectionRefusedError - Server '" + str(v2central.v2servername) + "' is closed on port " + str(v2central.v2serverport) + ".\n")
-  except TimeoutError:
-      log("Connection to '" + str(v2central.v2servername) + "' on port " + str(v2central.v2serverport) + " causes a timeout.\n")
-  except InternetConnectivityError:
-      log("Network is down, or host cannot be reached from the local IP address.\n")
-  else:
+  if serverstatus.checkServerStatus(v2central.v2servername, v2central.v2serverport):
     log("Anouncing the test pair <" + str(key) + ", " 
       + str(value) + "> expired in " + str(ttlval) + "s\n")
     v2central.v2centralizedadvertise_announce(key, value, ttlval)
@@ -65,11 +45,7 @@ def testCentralAdvertise_v2(key, value, ttlval):
 
 # test announce/lookup of UDP advertise server
 def testUDPAdvertise(key, value, ttlval):
-  try: 
-    serverstatus.checkDomain(udp.udpservername, udp.udpserverport)
-  except NetworkAddressError:
-    log("NetworkAddressError - Cannot resolve the hostname '" + str(udp.udpservername) + "'.\n")        
-  else:
+  if serverstatus.checkDomain(udp.udpservername, udp.udpserverport):
     try: 
       log("Anouncing the test pair <" + str(key) + ", " 
         + str(value) + "> expired in " + str(ttlval) + "s\n")

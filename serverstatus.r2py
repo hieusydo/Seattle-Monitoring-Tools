@@ -18,31 +18,36 @@ TimeoutError -- change servername to "google.com" and serverport to 81
 sockettimeout = dy_import_module('sockettimeout.r2py')
 
 # helper function to check the server's status alive or dead, and why? 
+# return False if there is any error, True otherwise
 def checkServerStatus(name, port):
   try:
     # if domain name is nonexistent, there is no need to open a connection
     serverip = gethostbyname(name)
   except NetworkAddressError:
-    raise
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(central.servername) + "'. No connection is opened.\n")    
   else: 
     try:
       # if domain name is resolved, try opening a connection
       sockobj = sockettimeout.timeout_openconnection(serverip, port, timeout=10)
     except ConnectionRefusedError:
       # occurs when trying to connect the server via a closed port
-      raise
+      log("ConnectionRefusedError - Server '" + str(central.servername) + "' is closed on port " + str(central.serverport) + ".\n")
     except TimeoutError:
-      raise
+      log("Connection to '" + str(central.servername) + "' on port " + str(central.serverport) + " causes a timeout.\n")
     except InternetConnectivityError:
-      raise
+      log("Network is down, or host cannot be reached from the local IP address.\n")
     else:
       log("Server name '" + str(name) + "' is resolved. Connection is opened successfully on port " + str(port) + ".\n")
+      return True
+  return False
 
 # helper function to check the domain name of the UDP server
 def checkDomain(name, port):
   try:
     serverip = gethostbyname(name)
   except NetworkAddressError:
-    raise
+    log("NetworkAddressError - Cannot resolve the hostname '" + str(udp.udpservername) + "'.\n")        
   else:
     log("Server name '" + str(name) + "' is resolved.\n")
+    return True
+  return False

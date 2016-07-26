@@ -32,28 +32,27 @@ updater_serverport = 443 # https port obtain from `nmap 128.238.63.51`
 
 def main():
   # check the status of the advertise server
-  serverstatus.checkServerStatus(updater_servername, updater_serverport)
+  if serverstatus.checkServerStatus(updater_servername, updater_serverport):
+    # download a temp 'metainfo' file
+    tempdir = tempfile.mkdtemp()+"/"
+    metainfo_downloaded = softwareupdater.safe_download(updatereurl, "metainfo", tempdir, 1024*32)
+    if not metainfo_downloaded:
+      print("Failed to download metainfo.")
+      return
+    print("Successfully downloaded metainfo")
 
-  # download a temp 'metainfo' file
-  tempdir = tempfile.mkdtemp()+"/"
-  metainfo_downloaded = softwareupdater.safe_download(updatereurl, "metainfo", tempdir, 1024*32)
-  if not metainfo_downloaded:
-    print("Failed to download metainfo.")
-    return
-  print("Successfully downloaded metainfo")
+    # read the file data into a string
+    newmetafileobject = file(tempdir+"metainfo")
+    newmetafiledata = newmetafileobject.read()
+    newmetafileobject.close()
 
-  # read the file data into a string
-  newmetafileobject = file(tempdir+"metainfo")
-  newmetafiledata = newmetafileobject.read()
-  newmetafileobject.close()
-
-  # check the signature of the downloaded 'metainfo'
-  # if the signature in the file matches with the software update public key, 
-  # then the software updater is delivering the correct update
-  if not signeddata.signeddata_issignedcorrectly(newmetafiledata, softwareupdater.softwareupdatepublickey):
-    print("CRITICAL - Downloaded metainfo not signed correctly. The updater site is delivering the correct updates")
-    return
-  print("Downloaded metainfo signed correctly. The updater site is delivering the correct updates")
+    # check the signature of the downloaded 'metainfo'
+    # if the signature in the file matches with the software update public key, 
+    # then the software updater is delivering the correct update
+    if not signeddata.signeddata_issignedcorrectly(newmetafiledata, softwareupdater.softwareupdatepublickey):
+      print("CRITICAL - Downloaded metainfo not signed correctly. The updater site is delivering the correct updates")
+      return
+    print("Downloaded metainfo signed correctly. The updater site is delivering the correct updates")
 
 
 if __name__ == '__main__':
