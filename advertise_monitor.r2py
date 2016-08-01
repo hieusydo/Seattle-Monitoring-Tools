@@ -1,14 +1,16 @@
 '''
 
-Author: Hieu Do 
+Author: 
+  Hieu Do 
 
-Start Date: June 6, 2016
+Start Date: 
+  June 6, 2016
 
 Description: 
-Check the status of the advertise server (central, central_v2, and udpcentral)
+  Check the status of the advertise server (central, central_v2, and udpcentral)
 
 Usage: 
-python repy.py restrictions.default dylink.r2py advertise_monitor.r2py
+  python repy.py restrictions.default dylink.r2py advertise_monitor.r2py
 
 '''
 

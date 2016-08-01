@@ -1,18 +1,20 @@
 '''
 
-Author: Hieu Do 
+Author: 
+  Hieu Do 
 
-Start Date: June 6, 2016
+Start Date: 
+  June 6, 2016
 
 Description: 
-Check that multiples nodes' IP addresses are registered to a single hostname
+  Check that multiples nodes' IP addresses are registered to a single hostname
 
 Credits:
-This monitoring script uses part of the code from zenodotus_alive.py 
-https://github.com/SeattleTestbed/integrationtests/blob/master/zenodotus/zenodotus_alive.py
+  This monitoring script uses part of the code from `zenodotus_alive.py`
+  https://github.com/SeattleTestbed/integrationtests/blob/master/zenodotus/zenodotus_alive.py
 
 Usage: 
-python zenodotus_monitor.py
+  python zenodotus_monitor.py
 
 '''
 import os

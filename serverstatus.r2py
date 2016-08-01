@@ -1,17 +1,19 @@
 '''
 
-Author: Hieu Do 
+Author: 
+  Hieu Do 
 
-Start Date: June 6, 2016
+Start Date: 
+  June 6, 2016
 
 Description: 
-Check the status of a given server: up or down; if down, why?
+  Check the status of a given server: up or down; if down, why?
 
-How to raise different exceptions for testing:
-ConnectionRefusedError -- change serverport to a closed port
-NetworkAddressError -- change the servername to a non-existent domain
-TimeoutError -- change servername to "google.com" and serverport to 81 
-                (this is just a sample timeout server)
+  How to raise different exceptions for testing:
+  ConnectionRefusedError -- change serverport to a closed port
+  NetworkAddressError -- change the servername to a non-existent domain
+  TimeoutError -- change servername to "google.com" and serverport to 81 
+                  (this is just a sample timeout server)
 
 '''
 

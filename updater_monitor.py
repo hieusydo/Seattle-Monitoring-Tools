@@ -1,16 +1,18 @@
 '''
 
-Author: Hieu Do 
+Author: 
+  Hieu Do 
 
-Start Date: June 6, 2016
+Start Date: 
+  June 6, 2016
 
 Description: 
-Check the status of the updater server 
-and if the updater site delivers the correct updates 
-by checking the signatures in a downloaded metainfo
+  Check the status of the updater server 
+  and if the updater site delivers the correct updates 
+  by checking the signatures in a downloaded metainfo
 
 Usage: 
-python updater_monitor.py
+  python updater_monitor.py
 
 '''
 import tempfile

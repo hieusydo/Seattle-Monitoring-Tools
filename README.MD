@@ -52,12 +52,14 @@ To consider:
 - Check if the updater site delivers the correct updates by checking the signatures in a downloaded metainfo 
 
 #### Zenodotus
+Same implementation as in `zenodotus_alive.py` in `integrationtests`
 - Check status of Zenodotus server. Servername: `zenodotus.poly.edu` - IP address: `128.238.63.50`
 - Use advertise service to check that multiples nodes' IP addresses are registered to a single hostname
 
 #### Time
+Same implementation as in `test_time_tcp.py` and `test_time_servers_running.py` in `integrationtests`
+- Find time server(s) by doing an advertise lookup
 - Make an NTP query and compare the returned time with the local time on the machine
-- Different ways to find the timeservers: 1 server
 
 #### Clearinghouse & Custom Installer Builder
 - Use `wget` to download the website 
@@ -70,9 +72,6 @@ To consider:
 
 ### c. Notifications
 - `send_gmail.py` module
-
-## Monitoring Pipelines
-
 
 
 
