@@ -29,7 +29,7 @@ advertise = dy_import_module("advertise.r2py")
 random = dy_import_module("random.r2py")
 rsa = dy_import_module('rsa.r2py')
 sha = dy_import_module('sha.r2py')
-
+serverstatus = dy_import_module('serverstatus.r2py')
 
 zenodotus_servername = "zenodotus.poly.edu"
 zenodotus_ipaddr = '128.238.63.50'
@@ -59,7 +59,12 @@ def _generate_random_dns_entry():
   random_dns_entry = random_subdomain + '.' + zenodotus_servername  
   return random_dns_entry
 
+
 def testZenodotus():
+  print "Checking domain name"
+  if not serverstatus.checkDomain(zenodotus_servername)
+    return False
+
   print "Beginning query."
   success = True
 
@@ -100,6 +105,7 @@ def testZenodotus():
     return success
 
   return success
+
 
 if __name__ == "__main__":
   testZenodotus()
