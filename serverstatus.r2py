@@ -44,9 +44,9 @@ def checkServerStatus(name, port):
   return False
 
 # helper function to check the domain name of the UDP server
-def checkDomain(name, port):
+def checkDomain(name):
   try:
-    serverip = gethostbyname(name)
+    gethostbyname(name)
   except NetworkAddressError:
     log("NetworkAddressError - Cannot resolve the hostname '" + str(udp.udpservername) + "'.\n")        
   else:
