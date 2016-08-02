@@ -62,7 +62,7 @@ def _generate_random_dns_entry():
 
 def testZenodotus():
   print "Checking domain name"
-  if not serverstatus.checkDomain(zenodotus_servername)
+  if not serverstatus.checkDomain(zenodotus_servername):
     return False
 
   print "Beginning query."
