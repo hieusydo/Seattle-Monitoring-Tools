@@ -63,19 +63,16 @@ def _generate_random_dns_entry():
 def testZenodotus():
   print "Checking domain name"
   if not serverstatus.checkDomain(zenodotus_servername):
-    return False
+    return "Domain name error. No query made."
 
   print "Beginning query."
-  success = True
 
   try:
     # Query zenodotus
     if not _dns_mapping_exists(zenodotus_servername, zenodotus_ipaddr):
-      print "Zenodotus failed to respond properly!"
+      return "Zenodotus failed to respond properly!"
       # Query is invalid!
-      success = False
-
-    # Check that advertised values work
+    
     # Map an entirely random IP to a random DNS name. The mapped IP does
     # not have to actually exist (but should still be valid).
     random_ip_address = _generate_random_ip_address()
@@ -92,19 +89,11 @@ def testZenodotus():
 
     if not _dns_mapping_exists(random_dns_entry, random_ip_address) and _dns_mapping_exists(random_dns_entry, r2andom_ip_address):
       print "Zenodotus failed to respond properly to advertised subdomain!"
-      # Query is invalid!
-      success = False
 
   except Exception, e:
-    print "Unknown error!"
-    print str(e)
-    success = False
+    return repr(e)
 
-  if success:
-    print "Query was successful."
-    return success
-
-  return success
+  return "Query was successful."
 
 
 if __name__ == "__main__":
