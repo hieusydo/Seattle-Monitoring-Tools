@@ -72,7 +72,9 @@ Same implementation as in `test_time_tcp.py` and `test_time_servers_running.py` 
 
 ### c. Notifications
 - `integrationtestslib.py` tracks errors. `notifications.py` tracks all statuses.
-- `send_gmail.py` module
+- Modes of notifications: report all statuses, report only errors, report frequency, report only prioritized services (determined by the users)
+- Use `send_gmail.py` module to send notification emails
+- Modularity between monitoring scripts and notification modules. 
 
 
 
